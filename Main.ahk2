@@ -1,0 +1,26 @@
+SetWorkingDir(A_ScriptDir)
+
+#Include Languages.ahk2
+
+languageSelection := languages.en
+if RegExMatch(A_Language, "..07")
+	languageSelection := languages.de
+
+configDir  := EnvGet("LocalAppdata") . "\WindowsTerminalQuakeTrayIcon\"
+configFile := configDir . "config.ini"
+
+
+Install() {
+	if not DirExist(configDir)
+		DirCreate(configDir)
+}
+
+Uninstall() {
+	if FileExist(configFile)
+		FileDelete(configFile)
+}
+
+
+#Include TrayIcon.ahk2
+
+Persistent(true)

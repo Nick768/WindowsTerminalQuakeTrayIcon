@@ -1,0 +1,29 @@
+tray := A_TrayMenu
+
+tray.Delete()
+
+tray.Add(languageSelection.openQuake, OpenQuake)
+tray.Add(languageSelection.settings, Settings)
+tray.Add(languageSelection.exit, Exit)
+
+tray.Default := languageSelection.openQuake
+
+
+OpenQuake(*) {
+	try
+		Run("wt.exe -w _quake")
+	catch
+		if MsgBox(languageSelection.noWTError,, 20) = "yes" {
+			Uninstall()
+			ExitApp()
+		}
+}
+
+Settings(*) {
+	MsgBox("Settings!")
+}
+
+
+Exit(*) {
+	ExitApp()
+}
