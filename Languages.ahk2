@@ -1,0 +1,12 @@
+languages := {
+	de: {
+		settings: "Einstellungen",
+		autostart: "Automatischer Start (bei Systemstart)",
+		exit: "Beenden"
+	}
+	en: {
+		settings: "Settings",
+		autostart: "Start on system start",
+		exit: "Exit"
+	}
+}
