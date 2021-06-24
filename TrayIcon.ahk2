@@ -1,22 +1,19 @@
 tray := A_TrayMenu
 
+; delete AHK's standard tray stuff
 tray.Delete()
 
+; add custom stuff
 tray.Add(languageSelection.openQuake, OpenQuake)
 tray.Add(languageSelection.settings, Settings)
 tray.Add(languageSelection.exit, Exit)
 
+; set default entry
 tray.Default := languageSelection.openQuake
 
 
 OpenQuake(*) {
-    try
-        Run("wt.exe -w _quake")
-    catch
-        if MsgBox(languageSelection.noWTError,, 20) = "yes" {
-            Uninstall()
-            ExitApp()
-        }
+    terminalAction()    ; defined in Main
 }
 
 Settings(*) {

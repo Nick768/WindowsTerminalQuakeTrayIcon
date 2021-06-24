@@ -1,26 +1,51 @@
-SetWorkingDir(A_ScriptDir)
+; make sure to use the correct version
+#Requires AutoHotkey v2.0-
 
+SetWorkingDir(A_ScriptDir)            ; not really needed; just to be save
+
+; Language definitions
 #Include Languages.ahk2
 
+; detect language (defaults to english)
 languageSelection := languages.en
-if RegExMatch(A_Language, "..07")
+if RegExMatch(A_Language, "..07")     ; every language code with xx07 means german
     languageSelection := languages.de
 
+; place for configs
 configDir  := EnvGet("LocalAppdata") . "\WindowsTerminalQuakeTrayIcon\"
 configFile := configDir . "config.ini"
 
 
+; install this script:
+; create link in shell:startup folder
+; create config
 Install() {
     if not DirExist(configDir)
         DirCreate(configDir)
 }
 
+
+; uninstall:
+; remove shirtcut from shell:startup
+; delete configDir recursively
 Uninstall() {
-    if FileExist(configFile)
-        FileDelete(configFile)
+    if DirExist(configDir)
+        DirDelete(configDir, true)
 }
 
 
+terminalAction() {
+    try
+        Run("wt.exe -w _quake")
+    catch
+        if MsgBox(languageSelection.noWTError,, 20) = "yes" {
+            Uninstall()
+            ExitApp()
+        }
+}
+
+
+; code for tray icon
 #Include TrayIcon.ahk2
 
-Persistent(true)
+Persistent(true)    ; only for testing
