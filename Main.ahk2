@@ -4,20 +4,20 @@ SetWorkingDir(A_ScriptDir)
 
 languageSelection := languages.en
 if RegExMatch(A_Language, "..07")
-	languageSelection := languages.de
+    languageSelection := languages.de
 
 configDir  := EnvGet("LocalAppdata") . "\WindowsTerminalQuakeTrayIcon\"
 configFile := configDir . "config.ini"
 
 
 Install() {
-	if not DirExist(configDir)
-		DirCreate(configDir)
+    if not DirExist(configDir)
+        DirCreate(configDir)
 }
 
 Uninstall() {
-	if FileExist(configFile)
-		FileDelete(configFile)
+    if FileExist(configFile)
+        FileDelete(configFile)
 }
 
 

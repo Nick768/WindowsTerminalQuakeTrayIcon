@@ -1,16 +1,16 @@
 languages := {
-	de: {
-		settings: "Einstellungen",
-		autostart: "Automatischer Start (bei Systemstart)",
-		openQuake: "Öffne Terminal im Quake-Modus",
-		noWTError: "Sie haben Windows Terminal nicht installiert!`nMöchten Sie das Programm beenden und die Einstellungen löschen?",
-		exit: "Beenden"
-	},
-	en: {
-		settings: "Settings",
-		autostart: "Start on system start",
-		openQuake: "Open termianl in quake-mode",
-		noWTError: "You don't have Windows Terminal installed!`nDo you want to exit this program and delete its configs?",
-		exit: "Exit"
-	}
+    de: {
+        settings: "Einstellungen",
+        autostart: "Automatischer Start (bei Systemstart)",
+        openQuake: "Öffne Terminal im Quake-Modus",
+        noWTError: "Sie haben Windows Terminal nicht installiert!`nMöchten Sie das Programm beenden und die Einstellungen löschen?",
+        exit: "Beenden"
+    },
+    en: {
+        settings: "Settings",
+        autostart: "Start on system start",
+        openQuake: "Open terminal in quake-mode",
+        noWTError: "You don't have Windows Terminal installed!`nDo you want to exit this program and delete its configs?",
+        exit: "Exit"
+    }
 }

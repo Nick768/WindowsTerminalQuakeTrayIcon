@@ -10,20 +10,20 @@ tray.Default := languageSelection.openQuake
 
 
 OpenQuake(*) {
-	try
-		Run("wt.exe -w _quake")
-	catch
-		if MsgBox(languageSelection.noWTError,, 20) = "yes" {
-			Uninstall()
-			ExitApp()
-		}
+    try
+        Run("wt.exe -w _quake")
+    catch
+        if MsgBox(languageSelection.noWTError,, 20) = "yes" {
+            Uninstall()
+            ExitApp()
+        }
 }
 
 Settings(*) {
-	MsgBox("Settings!")
+
 }
 
 
 Exit(*) {
-	ExitApp()
+    ExitApp()
 }
