@@ -17,7 +17,7 @@ OpenQuake(*) {
 }
 
 Settings(*) {
-
+    openSettings()      ; defined in Main
 }
 
 
