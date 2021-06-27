@@ -3,24 +3,10 @@ tray := A_TrayMenu
 ; delete AHK's standard tray stuff
 tray.Delete()
 
-; add custom stuff
-tray.Add(languageSelection.openQuake, OpenQuake)
-tray.Add(languageSelection.settings, Settings)
-tray.Add(languageSelection.exit, Exit)
+; add custom stuff / functions defined in Main
+tray.Add(languageSelection.openQuake, (*) => showTerminal())
+tray.Add(languageSelection.settings,  (*) => openSettings())
+tray.Add(languageSelection.exit,      (*) => ExitApp())
 
 ; set default entry
 tray.Default := languageSelection.openQuake
-
-
-OpenQuake(*) {
-    terminalAction()    ; defined in Main
-}
-
-Settings(*) {
-    openSettings()      ; defined in Main
-}
-
-
-Exit(*) {
-    ExitApp()
-}

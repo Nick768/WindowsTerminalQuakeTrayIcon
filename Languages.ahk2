@@ -3,14 +3,16 @@ languages := {
         settings:  "Einstellungen",
         autostart: "Automatischer Start (bei Systemstart)",
         openQuake: "Öffne Terminal im Quake-Modus",
-        noWTError: "Sie haben Windows Terminal nicht installiert!`nMöchten Sie das Programm beenden und die Einstellungen löschen?",
+        noWTError: "Sie haben Windows Terminal nicht installiert oder benutzen die falsche Version! Bitte installieren Sie falls nötig die Preview-Version aus dem Microsoft Store und überprüfen Sie Ihre App-Execution-Aliases in den Einstellungen!",
+        noWin10P:  "Ihre Windows-Version ist veraltet! Sie brauchen Windows 10 oder höher!",
         exit:      "Beenden"
     },
     en: {
         settings:  "Settings",
         autostart: "Start on system start",
         openQuake: "Open terminal in quake-mode",
-        noWTError: "You don't have Windows Terminal installed!`nDo you want to exit this program and delete its configs?",
+        noWTError: "You don't have Windows Terminal installed or you are using the wrong version! If necessary install the preview version from Microsoft Store and check your app-execution-aliases in the setiings app!",
+        noWin10P:  "Your Windows version is outdated! You have to have Windows 10 or higher!",
         exit:      "Exit"
     }
 }

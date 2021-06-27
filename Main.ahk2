@@ -1,68 +1,102 @@
 ; make sure to use the correct version
 #Requires AutoHotkey v2.0-
+#SingleInstance Force               ; Only one instance allowed
 
-SetWorkingDir(A_ScriptDir)            ; not really needed; just to be save
+SetWorkingDir(A_InitialWorkingDir)
 
 ; Language definitions
 #Include Languages.ahk2
 
 ; detect language (defaults to english)
 languageSelection := languages.en
-if RegExMatch(A_Language, "..07")     ; every language code with xx07 means german
+if RegExMatch(A_Language, "..07")	; every language code with xx07 means german
     languageSelection := languages.de
 
-
 ; place for configs
-configDir  := EnvGet("LocalAppdata") . "\WindowsTerminalQuakeTrayIcon\"
+configDir := EnvGet("LocalAppdata") . "\WindowsTerminalQuakeTrayIcon\"
 configFile := configDir . "config.ini"
-
 
 ; pre-start checks (not necessary if not first start)
 if IniRead(configFile, "Configs", "FirstStart", true) {
-    if not DirExist(configDir)
-        DirCreate(configDir)
-    if not FileExist(configFile)
-        FileAppend("
-        (LTrim
-            [Configs]
-            ; Here you can tweak some basic settings
+    ; check if the correct version of Windows Terminal is installed
+    ready := false
 
-            ; FirstStart: Boolean (0 or 1; 0 means false, 1 means true)
-            ; Whether the program was started more than once or not
-            FirstStart=0
+    if VerCompare(A_OSVersion, "10.0") < 0 {
+        MsgBox(languageSelection.noWin10P,, 16)
+        ExitApp()
+    }
 
-            [Hotkey]
-            ; Here you can set a custom key-combo with up to three keys
+    try {
+        Run("wt.exe --help")
 
-            ; NOTE:
-            ; You have to use the hotkeys defined by AutoHotkey V2 (read the docs)
-            ; https://lexikos.github.io/v2/docs/Hotkeys.htm
+        While not WinExist("ahk_class #32770 ahk_exe WindowsTerminal.exe")
+            Sleep(250)
 
-            ; Some basic keys:
-            ; Every letter or number can be used by defining it as it is
-            ; CTRL can be used like this:
-            ; LCtrl for the left and RCtrl for the right CTRL key
-            ; LShift for the left and RShift for the right shift key
-            ; Alt: LAlt for left Alt key / RAlt for right Alt key
-            ; Windows key: LWin (or RWin - probably not useful)
-            ; F1-F24 can be used as they are
-            ; Esc can also be used as it is
+        if InStr(WinGetText(), "-w,--window TEXT") {
+            WinClose()
 
-            ; Key1: Key on your keyboard / first of maximal three keys to be pressed
-            ; Key2: Key on your keyboard / second of maximal three keys to be pressed
-            ; Key3: Key on your keyboard / third of maximal three keys to be pressed
+            ready := true
+        }
+    } finally {
+        if ready {
+            if not DirExist(configDir)
+                DirCreate(configDir)
+            if not FileExist(configFile)
+                FileAppend("
+                    (LTrim
+                        [Configs]
+                        ; Here you can tweak some basic settings
 
-            ; Default: LWin + LShift + `` (like in Windows Terminal)
-            Key1=LWin
-            Key2=LShift
-            Key3=``
-        )", configFile, "`n")
+                        ; FirstStart: Boolean (0 or 1; 0 means false, 1 means true)
+                        ; Whether the program was started more than once or not
+                        FirstStart=0
 
-    if not A_WorkingDir = configDir
-        FileCopy(A_ScriptFullPath, configDir . A_ScriptName, true)
-    FileCreateShortcut(configDir . A_ScriptName, A_Startup . "\" . A_ScriptName)
+                        [Hotkey]
+                        ; Here you can set a custom key-combo with up to three keys
+
+                        ; NOTE:
+                        ; You have to use the hotkeys defined by AutoHotkey V2 (read the docs)
+                        ; https://lexikos.github.io/v2/docs/Hotkeys.htm
+
+                        ; Some basic keys:
+                        ; Every letter or number can be used by defining it as it is
+                        ; CTRL can be used like this:
+                        ; LCtrl for the left and RCtrl for the right CTRL key
+                        ; LShift for the left and RShift for the right shift key
+                        ; Alt: LAlt for left Alt key / RAlt for right Alt key
+                        ; Windows key: LWin (or RWin - probably not useful)
+                        ; F1-F24 can be used as they are
+                        ; Esc can also be used as it is
+
+                        ; Key1: Key on your keyboard / first of maximal three keys to be pressed
+                        ; Key2: Key on your keyboard / second of maximal three keys to be pressed
+                        ; Key3: Key on your keyboard / third of maximal three keys to be pressed
+
+                        ; Default: LWin + LShift + `` (like in Windows Terminal)
+                        Key1=LWin
+                        Key2=LShift
+                        Key3=``
+                    )", configFile, "`n")
+
+            if not A_ScriptFullPath = configDir . A_ScriptName {
+                if not A_IsCompiled {
+                    FileCopy(A_ScriptFullPath, configDir . "Languages.ahk2", true)
+                    FileCopy(A_ScriptFullPath, configDir . "TrayIcon.ahk2", true)
+                }
+                FileCopy(A_ScriptFullPath, configDir . A_ScriptName, true)
+            }
+            FileCreateShortcut(configDir . A_ScriptName, A_Startup . "\" . A_ScriptName . ".lnk", configDir)
+
+
+
+            Run(configDir . A_ScriptName)   ; this one could be a problem...
+            ExitApp()
+        } else {
+            MsgBox(languageSelection.noWTError,, 16)
+            ExitApp()
+        }
+    }
 }
-MsgBox(A_WorkingDir . "\" = configDir)
 
 ; Load configs
 loadConfigs() {
@@ -73,7 +107,9 @@ loadConfigs() {
     return
 }
 
-loadConfigs()
+
+
+; loadConfigs()
 
 ; uninstall:
 ; remove shirtcut from shell:startup
@@ -85,22 +121,11 @@ Uninstall() {
     return
 }
 
-
 ; Run the detected command
-terminalAction() {
-
-
-    try
-        Run("wt.exe -w _quake")
-    catch
-        if MsgBox(languageSelection.noWTError,, 20) = "yes" {
-            Uninstall()
-            ExitApp()
-        }
+showTerminal() {
 
     return
 }
-
 
 ; Open settings.ini in standard editor
 openSettings() {
@@ -110,7 +135,6 @@ openSettings() {
 
     return
 }
-
 
 ; code for tray icon
 #Include TrayIcon.ahk2
